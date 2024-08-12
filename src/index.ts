@@ -1,17 +1,20 @@
 // src/index.js
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import {
-  getAllFavoritesFromUser,
-  addFavorite,
-  removeFavorite,
-  createUniqueIdx,
-} from './db';
+import { getAllFavoritesFromUser, addFavorite, removeFavorite } from './db';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(
+  cors({
+    origin: '*',
+  })
+);
+app.use(express.json());
 
 app.get('/favorites/:userId', (req: Request, res: Response) => {
   getAllFavoritesFromUser(req.params.userId)
@@ -27,11 +30,7 @@ app.get('/favorites/:userId', (req: Request, res: Response) => {
     });
 });
 
-app.use(express.json());
-
 app.post('/favorites', (req: Request, res: Response) => {
-  console.log(req.body);
-
   addFavorite(req.body.userId, req.body.productId)
     .then(() => {
       res.status(201).json({
