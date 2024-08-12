@@ -42,8 +42,8 @@ app.post('/favorites', (req: Request, res: Response) => {
     });
 });
 
-app.delete('/favorites', (req: Request, res: Response) => {
-  removeFavorite(req.body.userId, req.body.productId)
+app.delete('/favorites/:userId/:productId', (req: Request, res: Response) => {
+  removeFavorite(req.params.userId, req.params.productId)
     .then(() => {
       res.json({
         message: 'Favorite removed successfully',
